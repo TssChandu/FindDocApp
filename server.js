@@ -9,7 +9,6 @@ const path = require("path");
 
 app.use(express.json())
 
-dbConfig()
 
 app.use('/api/user', userRoute);
 app.use('/api/doctor', doctorRoute);
