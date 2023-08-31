@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router();
+const nodemailer = require("nodemailer");
 const User = require("../models/userModel")
 const Doctor = require('../models/doctorModel')
 const bcrypt = require("bcryptjs")
@@ -7,6 +8,84 @@ const moment = require('moment')
 const jwt = require("jsonwebtoken")
 const Appointment = require('../models/appointmentModel')
 const authMiddleware = require('../middlewares/authMiddleware')
+
+function sendEmail({ recipient_email, OTP }) {
+  return new Promise((resolve, reject) => {
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: process.env.MY_EMAIL,
+        pass: process.env.MY_PASSWORD,
+      },
+    });
+
+    const mail_configs = {
+      from: process.env.MY_EMAIL,
+      to: recipient_email,
+      subject: "FINDDOC PASSWORD RECOVERY",
+      html: `<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>FINDDOC PASSWORD RECOVERY</title>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+  <div style="margin:50px auto;width:70%;padding:20px 0">
+    <div style="border-bottom:1px solid #eee">
+      <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">FINDDOC</a>
+    </div>
+    <p style="font-size:1.1em">Hi,</p>
+    <p>Thank you for using FINDDOC. Use the following OTP to complete your Password Recovery Procedure. OTP is valid for 5 minutes</p>
+    <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${OTP}</h2>
+    <p style="font-size:0.9em;">Regards,<br />FINDDOC</p>
+    <hr style="border:none;border-top:1px solid #eee" />
+    <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+      <p>FINDDOC Inc</p>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+</body>
+</html>`,
+    };
+    transporter.sendMail(mail_configs, function (error, info) {
+      if (error) {
+        console.log(error);
+        return reject({ message: `An error has occured` });
+      }
+      return resolve({ message: "Email sent succesfuly", success: true });
+    });
+  });
+}
+
+router.post("/send_recovery_email", async (req, res) => {
+  const { recipient_email } = req.body;
+  const user = await User.findOne({ email: recipient_email })
+  if (!user) {
+    return res.send({ message: "User not existed", success: false })
+  }
+  sendEmail(req.body)
+    .then((response) => res.send(response))
+    .catch((error) => res.status(500).send(error.message));
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    const password = req.body.password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    user.password = hashedPassword
+    await user.save()
+    res.status(200).send({ message: "Password updated successfully", success: true });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: "Error updating Password", success: false, error });
+  }
+})
 
 router.post("/register", async (req, res) => {
   try {

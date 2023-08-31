@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 require('dotenv').config()
 const dbConfig = require("./config/dbConfig");
 const userRoute = require("./routes/userRoute");
@@ -8,6 +9,12 @@ const doctorRoute = require('./routes/doctorRoute');
 const path = require("path");
 
 app.use(express.json())
+app.use(cors());
+app.use(express.urlencoded({ limit: "25mb" }));
+app.use((req, res, next) => {
+   res.setHeader("Access-Control-Allow-Origin", "*");
+   next();
+});
 
 
 app.use('/api/user', userRoute);
