@@ -22,10 +22,10 @@ app.use('/api/doctor', doctorRoute);
 app.use('/api/admin', adminRoute);
 
 //static files
-app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "./client/build")));
 
 app.get("*", function (req, res) {
-   res.sendFile(path.join(__dirname, "../client/build/index.html"));
+   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
 const port = process.env.PORT || 5000;
