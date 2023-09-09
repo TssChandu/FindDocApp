@@ -19,8 +19,7 @@ const doctorSchema = new mongoose.Schema(
             required: true,
         },
         website: {
-            type: String,
-            required: true,
+            type: String
         },
         address: {
             type: String,
