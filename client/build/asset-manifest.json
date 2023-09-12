@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.48304f7e.css",
-    "main.js": "/static/js/main.183c3156.js",
+    "main.css": "/static/css/main.ee9ddc70.css",
+    "main.js": "/static/js/main.cecaa00f.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/doc-app-bg.png": "/static/media/doc-app-bg.e034dd88739924d9d0ef.png",
     "static/media/doctor-appointment-logo.png": "/static/media/doctor-appointment-logo.91be2891a519f7c31bed.png",
     "index.html": "/index.html",
-    "main.48304f7e.css.map": "/static/css/main.48304f7e.css.map",
-    "main.183c3156.js.map": "/static/js/main.183c3156.js.map",
+    "main.ee9ddc70.css.map": "/static/css/main.ee9ddc70.css.map",
+    "main.cecaa00f.js.map": "/static/js/main.cecaa00f.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.48304f7e.css",
-    "static/js/main.183c3156.js"
+    "static/css/main.ee9ddc70.css",
+    "static/js/main.cecaa00f.js"
   ]
 }
